@@ -26,24 +26,28 @@ namespace WF_RepeatProject.Models;
                     Title = "Hitch hikers guide to the galaxy",
                     Author = "Douglas Adams",
                     Category = "Science Fiction",
+                    Price = 12.99M,
                 },
                 new Book
                 {
                     Title = "The Adventure Zone: Here Be Gerblins",
                     Author = "Griffin McElroy",
                     Category = "Fantasy",
+                    Price = 13.99M,
                 },
                 new Book
                 {
                     Title = "The Adventure Zone: Murder Rockport Limited",
                     Author = "Griffin McElroy",
                     Category = "Fantasy",
+                    Price = 13.99M,
                 },
                 new Book
                 {
                     Title = "One Piece: Volume 1",
                     Author = "Eiichiro Oda",
                     Category = "Adventure, Fantasy, Science Fiction",
+                    Price = 14.99M,
                 }
 
                 );

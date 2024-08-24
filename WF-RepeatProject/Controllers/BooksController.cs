@@ -20,9 +20,35 @@ namespace WF_RepeatProject.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string bookCategory, string searchString)
         {
-            return View(await _context.Book.ToListAsync());
+
+            if (_context.Book == null)
+            {
+                return Problem("Entity set 'BookContext.Book' is null");
+            }
+
+            IQueryable<string> genreQuery = from b in _context.Book orderby b.Category select b.Category;
+
+            var books = from b in _context.Book select b;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Title.ToUpper().Contains(searchString.ToUpper()));
+            }
+
+            if (!string.IsNullOrEmpty(bookCategory))
+            {
+                books = books.Where(x => x.Category == bookCategory);
+            }
+
+            var bookCategoryVM = new BookGenreViewModel
+            {
+                Categories = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Books = await books.ToListAsync(),
+            };
+
+            return View(bookCategoryVM);
         }
 
         // GET: Books/Details/5
@@ -54,7 +80,7 @@ namespace WF_RepeatProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Author,Category")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Title,Author,Category,Price")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +112,7 @@ namespace WF_RepeatProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Category")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Category,Price")] Book book)
         {
             if (id != book.Id)
             {
